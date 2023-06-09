@@ -3,6 +3,8 @@
 A [ColdFront](https://coldfront.readthedocs.io/en/latest/) plugin that provides `LDAPRemoteUserBackend` that will configure a user based on information pulled from LDAP.
 
 ## Installation
+If you're using a virtual environment (following ColdFront's deployment instructions should have you make and use a virtual environment), make sure you're in the virutal environment first.
+
 `pip install git+https://github.com/cecilialau6776/ruldap`
 
 ## Configuration
