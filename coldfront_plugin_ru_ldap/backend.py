@@ -23,15 +23,17 @@ class LDAPRemoteUserBackend(RemoteUserBackend):
             return None
         else:
             self.create_unknown_user = True
-        return super().authenticate(request, remote_user)
+
+        # Django 3.2 doesn't run configure_user() for each user
+        return self.configure_user(request, super().authenticate(request, remote_user))
 
     def clean_username(self, username):
         return username.split("@")[0]
 
     def configure_user(self, request, user, created=True):
         ud = self.user_dict[0]
-        logger.debug(ud)
         user.first_name = ud["first_name"]
         user.last_name = ud["last_name"]
         user.email = ud["email"]
+        user.save()
         return user
