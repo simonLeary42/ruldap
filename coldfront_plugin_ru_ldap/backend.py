@@ -1,4 +1,4 @@
-from coldfront.plugins.ldap_user_search.utils import LDAPUserSearch
+from coldfront.core.user.utils import CombinedUserSearch
 from django.contrib.auth.backends import RemoteUserBackend
 
 import logging
@@ -16,8 +16,8 @@ class LDAPRemoteUserBackend(RemoteUserBackend):
         if not remote_user:
             return None
         username = self.clean_username(remote_user)
-        search = LDAPUserSearch(username, "username_only")
-        self.user_dict = search.search_a_user(username, "username_only")
+        search = CombinedUserSearch(username, "username_only")
+        self.user_dict = search.search()["matches"]
         if len(self.user_dict) == 0:
             # LDAP doesn't have this user
             return None
