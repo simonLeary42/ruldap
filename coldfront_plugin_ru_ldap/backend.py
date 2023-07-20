@@ -18,9 +18,10 @@ class LDAPRemoteUserBackend(RemoteUserBackend):
     def authenticate(self, request, remote_user):
         if not remote_user:
             return None
-        email = self.clean_username(remote_user)
-        search = LDAPCustomMapping(email, "email")
-        search_results = search.search_a_user(email, "email")
+        search_term = self.clean_username(remote_user)
+        search_by = import_from_settings("RULDAP_SEARCH_BY", "username")
+        search = LDAPCustomMapping(search_term, search_by)
+        search_results = search.search_a_user(search_term, search_by)
         self.user_dict = search_results
         if len(self.user_dict) == 0:
             # LDAP doesn't have this user

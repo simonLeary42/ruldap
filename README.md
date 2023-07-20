@@ -22,4 +22,4 @@ If you wish to define a custom header, append `coldfront_plugin_ru_ldap.middlewa
 
 ## Details
 ~~`ruldap` uses the [`CombinedUserSearch`](https://github.com/ubccr/coldfront/blob/v1.1.4/coldfront/core/user/utils.py#L74) class built in to ColdFront that uses the classes in `ADDITIONAL_USER_SEARCH_CLASSES`. This means that if you add additional user search classes, it will attempt to use those classes. For example, if you enable the [`ldap_user_search` plugin](https://github.com/ubccr/coldfront/tree/v1.1.4/coldfront/plugins/ldap_user_search), `ruldap` will use `ldap_user_search` to find users.~~
-`REMOTE_USER` expects an email, and will check against that.
+~~`REMOTE_USER` expects an email, and will check against that.~~
