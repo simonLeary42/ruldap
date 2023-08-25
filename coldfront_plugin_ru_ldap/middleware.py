@@ -30,7 +30,9 @@ class CustomHeaderMiddleware(RemoteUserMiddleware):
         # persisted in the session and we don't need to continue.
         if request.user.is_authenticated:
             # changed get_username() to email; since that's what we're using
-            if request.user.email == self.clean_username(username, request):
+            expect_email = import_from_settings("RULDAP_EXPECT_EMAIL", False)
+            check_query = request.user.email if expect_email else request.user.username
+            if check_query == self.clean_username(username, request):
                 return
             else:
                 # An authenticated user is associated with the request, but
