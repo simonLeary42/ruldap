@@ -23,6 +23,7 @@ class LDAPRemoteUserBackend(RemoteUserBackend):
         search = LDAPCustomMapping(search_term, search_by)
         search_results = search.search_a_user(search_term, search_by)
         self.user_dict = search_results
+        self.CONFIGURE_USER = import_from_settings("RULDAP_CONFIGURE_USER", configure_user)
         if len(self.user_dict) == 0:
             # LDAP doesn't have this user
             return None
@@ -37,23 +38,23 @@ class LDAPRemoteUserBackend(RemoteUserBackend):
                 UserModel.USERNAME_FIELD: username
             })
             if created:
-                user = self.configure_user(request, user)
+                user = self.CONFIGURE_USER(self, request, user, created)
         else:
             try:
                 user = UserModel._default_manager.get_by_natural_key(username)
             except UserModel.DoesNotExist:
                 pass
-        user = self.configure_user(request, user)
+        user = self.CONFIGURE_USER(self, request, user)
         return user
 
     def clean_username(self, username):
         return username
         # return username.split("@")[0]
 
-    def configure_user(self, request, user, created=True):
-        ud = self.user_dict
-        user.first_name = ud["first_name"]
-        user.last_name = ud["last_name"]
-        user.email = ud["email"]
-        user.save()
-        return user
+def configure_user(self, request, user, created=False):
+    ud = self.user_dict
+    user.first_name = ud["first_name"]
+    user.last_name = ud["last_name"]
+    user.email = ud["email"]
+    user.save()
+    return user
